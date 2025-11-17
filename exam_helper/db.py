@@ -5,8 +5,6 @@ from pathlib import Path
 
 import matplotlib.pyplot as plt
 
-from exam_helper.models import Task
-
 _DB_FILE = Path("exam_helper.sqlite")
 
 
@@ -18,12 +16,15 @@ class ExamHelperDB:
         self.connection = sqlite3.connect(_DB_FILE)
         self.cursor = self.connection.cursor()
 
-    def add_task(self, task: Task, solved: bool) -> None:
-        """Добавление записи о решении задачи."""
-        # TODO: Добавление информации о задаче
         self.cursor.execute(
-            "INSERT INTO tasks (id, solved) VALUES (?, ?)",
-            (task.id_, solved),
+            "CREATE TABLE IF NOT EXISTS tasks (solved BOOLEAN)",
+        )
+
+    def add_task(self, solved: bool) -> None:
+        """Добавление записи о решении задачи."""
+        self.cursor.execute(
+            "INSERT INTO tasks (solved) VALUES (?)",
+            (solved),
         )
         self.connection.commit()
 
@@ -32,10 +33,9 @@ class ExamHelperDB:
         self.cursor.execute(
             "SELECT * FROM tasks",
         )
-        tasks = self.cursor.fetchall()
 
         # Генерируем график аналитики
-        plt.plot([task[1] for task in tasks])
+        plt.plot(self.cursor.fetchall())
         plt.savefig("graph.png")
 
 

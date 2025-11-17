@@ -2,6 +2,7 @@
 
 from random import choice
 
+from PySide6.QtCore import Qt
 from PySide6.QtGui import QPixmap
 from PySide6.QtWidgets import (
     QComboBox,
@@ -34,6 +35,7 @@ class ExamHelperApp(QMainWindow):
         self.setWindowTitle("exam-helper")
         self.setGeometry(500, 500, _WIDTH, _HEIGHT)
 
+        # По умолчанию выбрана информатика
         self.choice_subject(0)
 
     def choice_subject(self, subject: str) -> None:
@@ -58,7 +60,7 @@ class ExamHelperApp(QMainWindow):
             self.result_label.setStyleSheet("color: red;")
 
         # Добавляем отчёт в бд
-        db.add_task(self.task, answer == user_answer)
+        db.add_task(answer == user_answer)
         self.answer_input.clear()
 
     def task_screen(self) -> None:
@@ -89,6 +91,12 @@ class ExamHelperApp(QMainWindow):
         description.setWordWrap(True)
         description.setStyleSheet("font-size: 14px;")
 
+        description.setTextInteractionFlags(
+            Qt.TextSelectableByMouse
+            | Qt.TextSelectableByKeyboard
+            | Qt.LinksAccessibleByMouse,
+        )
+
         # Поле для ввода ответа
         self.answer_input = QLineEdit()
         self.answer_input.setPlaceholderText("Введите ваш ответ здесь...")
@@ -100,6 +108,11 @@ class ExamHelperApp(QMainWindow):
         # Метка для отображения результата проверки
         self.result_label = QLabel("")
         self.result_label.setStyleSheet("font-size: 14px;")
+        self.result_label.setTextInteractionFlags(
+            Qt.TextSelectableByMouse
+            | Qt.TextSelectableByKeyboard
+            | Qt.LinksAccessibleByMouse,
+        )
 
         # Оформление
         central = QWidget(self)
@@ -108,7 +121,6 @@ class ExamHelperApp(QMainWindow):
         root_layout.setSpacing(12)
 
         # Компоновка
-        root_layout.addWidget(analytics_button)
         root_layout.addWidget(next_button)
         root_layout.addWidget(combo)
         root_layout.addWidget(description)

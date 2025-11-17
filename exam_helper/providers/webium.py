@@ -6,8 +6,8 @@ from .base import BaseProvider
 
 _BASE_URL = "https://bank-zadaniy.webium.ru/api/v2/task-bank/topics/"
 _SUBJECT_ID = {
-    "география": 1,
     "информатика": 2,
+    "география": 1,
     "биология": 3,
     "профильная математика": 4,
     "русский язык": 5,
@@ -64,10 +64,8 @@ class WebiumProvider(BaseProvider):
             f"{_BASE_URL}{subject_id}/tasks/{id_}/add-solution/",
             json={"text": answer},
         ) as r:
-            print(r.url)
-            data = r.json()
-            print(data)
-            data = data["correctAnswers"]
+            # TODO: С некоторыми типами задач могут быть ошибки
+            data = r.json()["correctAnswers"]
 
         return (
             data["correctAnswer"],
