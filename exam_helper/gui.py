@@ -10,6 +10,7 @@ from PySide6.QtWidgets import (
     QLineEdit,
     QMainWindow,
     QPushButton,
+    QScrollArea,
     QVBoxLayout,
     QWidget,
 )
@@ -97,6 +98,12 @@ class ExamHelperApp(QMainWindow):
             | Qt.LinksAccessibleByMouse,
         )
 
+        description_area = QScrollArea()
+        description_area.setWidgetResizable(True)
+        description_area.setWidget(description)
+        description_area.setHorizontalScrollBarPolicy(Qt.ScrollBarAsNeeded)
+        description_area.setVerticalScrollBarPolicy(Qt.ScrollBarAsNeeded)
+
         # Поле для ввода ответа
         self.answer_input = QLineEdit()
         self.answer_input.setPlaceholderText("Введите ваш ответ здесь...")
@@ -114,6 +121,12 @@ class ExamHelperApp(QMainWindow):
             | Qt.LinksAccessibleByMouse,
         )
 
+        result_label_area = QScrollArea()
+        result_label_area.setWidgetResizable(True)
+        result_label_area.setWidget(self.result_label)
+        result_label_area.setHorizontalScrollBarPolicy(Qt.ScrollBarAsNeeded)
+        result_label_area.setVerticalScrollBarPolicy(Qt.ScrollBarAsNeeded)
+
         # Оформление
         central = QWidget(self)
         root_layout = QVBoxLayout(central)
@@ -121,13 +134,14 @@ class ExamHelperApp(QMainWindow):
         root_layout.setSpacing(12)
 
         # Компоновка
+        root_layout.addWidget(analytics_button)
         root_layout.addWidget(next_button)
         root_layout.addWidget(combo)
-        root_layout.addWidget(description)
+        root_layout.addWidget(description_area)
         root_layout.addSpacing(8)
         root_layout.addWidget(self.answer_input)
         root_layout.addWidget(check_button)
-        root_layout.addWidget(self.result_label)
+        root_layout.addWidget(result_label_area)
         root_layout.addSpacing(8)
 
         self.setCentralWidget(central)

@@ -60,17 +60,22 @@ class WebiumProvider(BaseProvider):
 
         subject_id = _SUBJECT_ID[subject]
 
-        with self.session.post(
-            f"{_BASE_URL}{subject_id}/tasks/{id_}/add-solution/",
-            json={"text": answer},
-        ) as r:
-            # TODO: С некоторыми типами задач могут быть ошибки
-            data = r.json()["correctAnswers"]
+        try:
 
-        return (
-            data["correctAnswer"],
-            data["explanation"],
-        )
+            with self.session.post(
+                f"{_BASE_URL}{subject_id}/tasks/{id_}/add-solution/",
+                json={"text": answer},
+            ) as r:
+                # TODO: С некоторыми типами задач могут быть ошибки
+                data = r.json()["correctAnswers"]
+
+            return (
+                data["correctAnswer"],
+                data["explanation"],
+            )
+
+        except KeyError:
+            return ("Ошибка во время проверки задачи (вы можете пропустить её)", "")
 
     def kim_numbers(self, subject: str) -> None:
         """Список номеров заданий в КИМ-ах."""
