@@ -1,10 +1,31 @@
 [project]
 name = "exam-helper"
 version = "0.1.0"
-description = "Add your description here"
+description = "exam-helper - подготовка к экзаменам с комфортом."
 readme = "README.md"
 requires-python = ">=3.13"
-dependencies = []
+dependencies = [
+    "matplotlib>=3.10.7",
+    "pyqtdarktheme>=2.1.0",
+    "pyside6>=6.10.0",
+    "requests>=2.32.5",
+]
 
 [tool.ruff.lint]
 select = ["ALL"]
+ignore = [
+    # TO DO
+    "TD", "FIX002",
+
+    # Cyrilyc symbols
+    "RUF003", "RUF002",
+
+    # Standart random
+    "S311",
+
+    # Print
+    "T201",
+
+    # Boolean positional argument
+    "FBT001"
+]
